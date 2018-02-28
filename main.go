@@ -23,6 +23,10 @@ func init() {
 }
 
 func main() {
+	if Config == "" || UserID == "" {
+		fmt.Println("usage: discord_tui -c <path to config> -u <user to chat with>")
+		return
+	}
 
 	data, err := ioutil.ReadFile(Config)
 	if err != nil {
