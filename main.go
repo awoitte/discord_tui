@@ -9,6 +9,7 @@ import (
 
 	"github.com/awoitte/input_output_tui"
 	"github.com/bwmarrin/discordgo"
+	"github.com/kyokomi/emoji"
 )
 
 var (
@@ -86,11 +87,12 @@ func send_input_to_discord(input, messages chan string, dg *discordgo.Session, c
 	for {
 		select {
 		case received := <-input:
-			_, err := dg.ChannelMessageSend(channelID, received)
+			with_emoji := emoji.Sprint(received)
+			_, err := dg.ChannelMessageSend(channelID, with_emoji)
 			if err != nil {
 				messages <- fmt.Sprintln("error sending message,", err)
 			} else {
-				messages <- format_message(dg.State.User.Username, received)
+				messages <- format_message(dg.State.User.Username, with_emoji)
 			}
 		case <-time.After(time.Second):
 		}
